@@ -1,0 +1,12 @@
+.App {
+  min-height: 400px;
+  text-align: center;
+  width: 400px;
+  background-color: aqua;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
