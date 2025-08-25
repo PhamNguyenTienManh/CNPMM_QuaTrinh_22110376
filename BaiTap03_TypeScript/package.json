@@ -1,10 +1,12 @@
 {
-  "name": "baitapbuoi2",
+  "name": "baitapbuoi3",
   "version": "1.0.0",
-  "main": "server.js",
-  "scripts": {
+  "main": "server.ts",
+   "type": "module",
+   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --exec babel-node src/server.js"
+    "start": "nodemon --exec tsx src/server.ts",
+    "dev": "nodemon --exec tsx src/server.ts"
   },
   "author": "Pham Nguyen Tien Manh",
   "license": "ISC",
@@ -22,7 +24,12 @@
     "@babel/core": "^7.28.3",
     "@babel/node": "^7.28.0",
     "@babel/preset-env": "^7.28.3",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.3.0",
     "nodemon": "^3.1.10",
-    "sequelize-cli": "^6.6.3"
+    "sequelize-cli": "^6.6.3",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
   }
 }
