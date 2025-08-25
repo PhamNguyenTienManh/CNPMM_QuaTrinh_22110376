@@ -33,7 +33,7 @@ let getFindAllCrud = async (req,res) => {
     // console.log('................................');
     //return res.send('findAll crud to server');
     return res.render('users/findAllUser.ejs',{
-        dataList: data
+        datalist: data
     });
     
 }
@@ -54,7 +54,7 @@ let getEditCRUD = async (req,res) => {
         // console.log('................................');
         // console.log(userData);
         // console.log('................................');
-        return res.render('users/editUser.ejs',{
+        return res.render('users/updateUser.ejs',{
             data: userData
         });
     }else{
@@ -69,7 +69,7 @@ let putCRUD = async (req, res) =>{
     let data1 = await CRUDService.updateUser(data);//update rồi hiển thị lại danh sách user
     //let data1 = await CRUDService.getAllUser();//hiển thị lại danh sách user
     return res.render('users/findAllUser.ejs',{
-        dataList: data1
+        datalist: data1
     });
     // return res.send('update thành công');
 }

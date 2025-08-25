@@ -1,5 +1,21 @@
+<head>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
 <body>
-    <table style="width:100%">
+    <table>
         <tr>
             <th>Email</th>
             <th>First Name</th>
@@ -13,7 +29,10 @@
             <td><%= datalist[i].firstName %></td>
             <td><%= datalist[i].lastName %></td>
             <td><%= datalist[i].address %></td>
-            <td><a href="/edit-crud?id=<%= datalist[i].id %>">Edit</a>|<a href="/delete-crud?id=<%= datalist[i].id %>">Delete</a></td>
+            <td>
+                <a href="/edit-crud?id=<%= datalist[i].id %>">Edit</a> | 
+                <a href="/delete-crud?id=<%= datalist[i].id %>">Delete</a>
+            </td>
         </tr>
         <% } %>
     </table>
