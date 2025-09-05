@@ -22,3 +22,24 @@ export const getUserApi = () =>{
 export const getProtected = async () => {
   return instance.get(`${API_URL}/account`);
 };
+
+interface GetProductByCategoryParams {
+  categoryId: string;
+  currentPage?: number;
+  limit?: number;
+  search?: string;
+}
+
+export const getProductByCategory = async ({
+  categoryId,
+  currentPage = 1,
+  limit = 6,
+  search = "",
+}: GetProductByCategoryParams) => {
+  return instance.get(`${API_URL}/products`, {
+    params: { categoryId, currentPage, limit, search },
+  });
+};
+
+
+
