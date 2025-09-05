@@ -5,7 +5,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon ./src/server.js",
-    "start": "nodemon ./src/server.js"
+    "start": "nodemon ./src/server.js",
+    "seed:categories": "node src/seeders/seedCategories.js",
+    "seed:products": "node src/seeders/seedProducts.js"
   },
   "author": "Phạm Nguyễn Tiến Mạnh",
   "license": "ISC",
