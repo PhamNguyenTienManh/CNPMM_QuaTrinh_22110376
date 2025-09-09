@@ -1,5 +1,5 @@
 const Product = require("../models/product");
-
+const { elasticClient } = require("../config/elasticClient");
 // Tạo sản phẩm
 const createProduct = async (data) => {
   const product = new Product(data);
@@ -7,24 +7,54 @@ const createProduct = async (data) => {
 };
 
 // Lấy tất cả sản phẩm (có filter theo category, phân trang / lazy load)
-const getProducts = async ({ categoryId, page = 1, limit = 10 }) => {
-  const query = {};
-  if (categoryId) query.categoryId = categoryId;
-
+const getProducts = async ({ categoryId, page = 1, limit = 10, q }) => {
   const skip = (page - 1) * limit;
 
-  const [products, total] = await Promise.all([
-    Product.find(query).skip(skip).limit(limit).lean(),
-    Product.countDocuments(query),
-  ]);
+  const queryBody = {
+    from: skip,
+    size: limit,
+    query: {
+      bool: {
+        filter: categoryId ? [{ term: { categoryId } }] : []
+      }
+    }
+  };
+
+  if (q) {
+    const queryTerms = q.trim().split(/\s+/);
+    queryBody.query.bool.must = queryTerms.map(term => ({
+      bool: {
+        should: [
+          { prefix: { name: term.toLowerCase() } },
+          { fuzzy: { name: { value: term.toLowerCase(), fuzziness: "AUTO", prefix_length: 1 } } },
+          { wildcard: { name: `*${term.toLowerCase()}*` } }
+        ],
+        minimum_should_match: 1
+      }
+    }));
+  } else {
+    // Nếu không có q, chỉ cần match_all
+    if (!queryBody.query.bool.must) {
+      queryBody.query = { bool: queryBody.query.bool };
+      queryBody.query.bool.must = [{ match_all: {} }];
+    }
+  }
+
+  const result = await elasticClient.search({
+    index: "products",
+    ...queryBody
+  });
+
+  const products = result.hits.hits.map(hit => hit._source);
 
   return {
     products,
-    total,
+    total: result.hits.total.value,
     currentPage: page,
-    totalPages: Math.ceil(total / limit),
+    totalPages: Math.ceil(result.hits.total.value / limit),
   };
 };
+
 
 // Lấy sản phẩm theo ID
 const getProductById = async (id) => {

@@ -2,11 +2,11 @@ const { getProducts } = require("../services/productService");
 
 const getProductPagination = async (req, res) => {
   try {
-    const { categoryId } = req.query;
+    const { categoryId, q } = req.query;
     const page = parseInt(req.query.currentPage) || 1;
     const limit = parseInt(req.query.limit) || 10;
- 
-    const responseData = await getProducts({ categoryId, page, limit });
+
+    const responseData = await getProducts({ categoryId, page, limit, q });
 
     res.json(responseData);
   } catch (error) {
