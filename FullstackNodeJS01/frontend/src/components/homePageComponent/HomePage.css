@@ -23,12 +23,107 @@
 }
 
 .search-box input {
+  height: 100%;
+  max-height: 40px;
   padding: 8px 12px;
   border-radius: 20px;
   border: none;
   outline: none;
   width: 220px;
+  margin-bottom: 0;
 }
+
+/* Hamburger button */
+.hamburger {
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  transition: transform 0.2s;
+}
+
+.hamburger:hover {
+  transform: scale(1.2);
+}
+
+/* Menu dropdown */
+/* Trong file CSS của bạn */
+
+.filter-title {
+  display: flex; /* Bật Flexbox */
+  justify-content: space-between; /* Đẩy nội dung và icon ra hai phía */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  cursor: pointer;
+  padding: 12px; /* Tăng padding để có khoảng cách tốt hơn */
+  font-weight: bold;
+}
+
+.filter-section {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+}
+
+.dropdown-icon {
+  font-size: 14px; /* Điều chỉnh kích thước icon */
+  margin-left: 10px; /* Thêm khoảng cách giữa chữ và icon */
+}
+
+.menu-dropdown {
+  position: absolute;
+  top: 60px; /* tùy theo height header */
+  right: 20px; /* căn sát nút hamburger */
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  padding: 10px 0;
+  min-width: 180px;
+  z-index: 20;
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* Category item */
+.menu-item {
+  display: block;
+  width: 100%;
+  padding: 10px 20px;
+  text-align: left;
+  cursor: pointer;
+  font-weight: 500;
+  color: #333;
+  background: none;
+  border: none;
+  transition: background-color 0.2s;
+}
+
+.menu-item:hover {
+  background-color: #f0f0f0;
+  color: #007bff;
+  border-radius: 4px;
+}
+
+.menu-item.active {
+  background-color: #e0f7ff; /* Màu nền xanh nhạt */
+  color: #007bff; /* Màu chữ xanh dương */
+  font-weight: bold; /* Tùy chọn: làm chữ đậm hơn */
+}
+
+/* Animation khi mở menu */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive: khi màn hình nhỏ, menu dropdown rộng toàn màn hình */
+@media (max-width: 600px) {
+  .menu-dropdown {
+    right: 10px;
+    left: 10px;
+    min-width: auto;
+  }
+}
+
 
 /* Product Section */
 .product-section {

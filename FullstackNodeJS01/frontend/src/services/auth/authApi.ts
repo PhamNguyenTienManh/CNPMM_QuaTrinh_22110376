@@ -24,21 +24,50 @@ export const getProtected = async () => {
 };
 
 interface GetProductByCategoryParams {
-  categoryId: string;
+  categoryId?: string;
   currentPage?: number;
   limit?: number;
-  search?: string;
+  q?: string;
+  priceIncrease?: boolean;
+  priceDecrease?: boolean;
+  newest?: boolean;
 }
 
 export const getProductByCategory = async ({
   categoryId,
   currentPage = 1,
   limit = 6,
-  search = "",
+  q = "",
+  priceIncrease = false,
+  priceDecrease = false,
+  newest = false,
 }: GetProductByCategoryParams) => {
   return instance.get(`${API_URL}/products`, {
-    params: { categoryId, currentPage, limit, search },
+    params: {
+      categoryId,
+      currentPage,
+      limit,
+      q,
+      priceIncrease,
+      priceDecrease,
+      newest,
+    },
   });
+};
+
+export interface Category {
+  _id: string;
+  name: string;
+}
+
+export const getCategory = async (): Promise<Category[]> => {
+  try {
+    const res = await instance.get(`${API_URL}/category`);
+    return res.data; // trả về mảng category
+  } catch (error: any) {
+    console.error("Error fetching categories:", error.message || error);
+    throw error;
+  }
 };
 
 
