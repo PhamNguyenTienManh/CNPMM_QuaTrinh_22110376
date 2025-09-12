@@ -64,6 +64,7 @@ const seedProducts = async () => {
           price: product.price,
           categoryId: product.categoryId.toString(),
           imageUrl: product.imageUrl,
+          createdAt: product.createdAt, 
         },
       });
     }

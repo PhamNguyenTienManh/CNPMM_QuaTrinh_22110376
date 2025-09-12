@@ -7,18 +7,30 @@ const createProduct = async (data) => {
 };
 
 // Lấy tất cả sản phẩm (có filter theo category, phân trang / lazy load)
-const getProducts = async ({ categoryId, page = 1, limit = 10, q }) => {
+const getProducts = async ({ categoryId, page = 1, limit = 10, q, priceIncrease = false, priceDecrease = false, newest = false }) => {
   const skip = (page - 1) * limit;
 
+  // Khởi tạo queryBody, bao gồm cả mảng 'sort'
   const queryBody = {
     from: skip,
     size: limit,
+    sort: [],
     query: {
       bool: {
         filter: categoryId ? [{ term: { categoryId } }] : []
       }
     }
   };
+
+  // Thêm điều kiện sắp xếp vào mảng 'sort'
+  if (priceIncrease) {
+    queryBody.sort.push({ price: { order: "asc" } }); // Sắp xếp giá tăng dần
+  } else if (priceDecrease) {
+    queryBody.sort.push({ price: { order: "desc" } }); // Sắp xếp giá giảm dần
+  } else if (newest) {
+    queryBody.sort.push({ createdAt: { order: "desc" } }); // Sắp xếp mới nhất trước
+  }
+  // Nếu không có điều kiện nào, Elasticsearch sẽ sắp xếp theo _score mặc định
 
   if (q) {
     const queryTerms = q.trim().split(/\s+/);
@@ -33,7 +45,6 @@ const getProducts = async ({ categoryId, page = 1, limit = 10, q }) => {
       }
     }));
   } else {
-    // Nếu không có q, chỉ cần match_all
     if (!queryBody.query.bool.must) {
       queryBody.query = { bool: queryBody.query.bool };
       queryBody.query.bool.must = [{ match_all: {} }];
@@ -42,7 +53,7 @@ const getProducts = async ({ categoryId, page = 1, limit = 10, q }) => {
 
   const result = await elasticClient.search({
     index: "products",
-    ...queryBody
+    body: queryBody
   });
 
   const products = result.hits.hits.map(hit => hit._source);

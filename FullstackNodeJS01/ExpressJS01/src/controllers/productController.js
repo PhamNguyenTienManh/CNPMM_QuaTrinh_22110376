@@ -5,8 +5,20 @@ const getProductPagination = async (req, res) => {
     const { categoryId, q } = req.query;
     const page = parseInt(req.query.currentPage) || 1;
     const limit = parseInt(req.query.limit) || 10;
+    
+    const priceIncrease = req.query.priceIncrease === 'true';
+    const priceDecrease = req.query.priceDecrease === 'true';
+    const newest = req.query.newest === 'true'; 
 
-    const responseData = await getProducts({ categoryId, page, limit, q });
+    const responseData = await getProducts({ 
+      categoryId, 
+      page, 
+      limit, 
+      q, 
+      priceIncrease, 
+      priceDecrease,
+      newest 
+    });
 
     res.json(responseData);
   } catch (error) {
