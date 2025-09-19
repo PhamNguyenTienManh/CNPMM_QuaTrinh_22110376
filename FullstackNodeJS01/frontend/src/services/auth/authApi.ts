@@ -70,5 +70,105 @@ export const getCategory = async (): Promise<Category[]> => {
   }
 };
 
+// Lấy thông tin chi tiết sản phẩm
+export const getProductInfo = async (productId: string) => {
+   try {
+    const res = await instance.get(`${API_URL}/products/${productId}`);
+    return res.data; 
+  } catch (error: any) {
+    console.error("Error fetching product info:", error.message || error);
+    throw error;
+  }
+};
 
+// Lấy đánh giá từ sản phẩm
+export const getProductFeedback = async (productId: string) => {
+   try {
+    const res = await instance.get(`${API_URL}/feedback/${productId}`);
+    return res.data; 
+  } catch (error: any) {
+    console.error("Error fetching product feedback:", error.message || error);
+    throw error;
+  }
+};
 
+// Thêm sản phẩm đã xem
+export const viewProduct = async (productId: string) => {
+   try {
+    const res = await instance.post(`${API_URL}/product-views`, {
+      productId,
+    });
+    return res.data; 
+  } catch (error: any) {
+    console.error("Error while processing view product:", error.message || error);
+    throw error;
+  }
+};
+
+// Lấy ra những sản phẩm đã xem gần đây nhất
+export const getViewedProductRecent = async () => {
+   try {
+    const res = await instance.get(`${API_URL}/product-views/recent`);
+    return res.data; 
+  } catch (error: any) {
+    console.error("Error while getting viewed products:", error.message || error);
+    throw error;
+  }
+};
+
+// Lấy ra những sản phẩm tương tự
+export const getSimilarProducts = async (productId: string) => {
+   try {
+    const res = await instance.get(`${API_URL}/products-similar/${productId}`);
+    return res.data; 
+  } catch (error: any) {
+    console.error("Error fetching similar products:", error.message || error);
+    throw error;
+  }
+};
+
+// Thêm sản phẩm yêu thích
+export const addFavoriteProduct = async (productId: string) => {
+   try {
+    const res = await instance.post(`${API_URL}/favorite`, {
+      productId,
+    });
+    return res.data; 
+  } catch (error: any) {
+    console.error("Error adding favorite product:", error.message || error);
+    throw error;
+  }
+};
+
+// Xóa sản phẩm yêu thích
+export const removeFavoriteProduct = async (productId: string) => {
+   try {
+    const res = await instance.delete(`${API_URL}/favorite/${productId}`);
+    return res.data; 
+  } catch (error: any) {
+    console.error("Error deleting favorite product:", error.message || error);
+    throw error;
+  }
+};
+
+// Kiểm tra sản phẩm yêu thích
+export const checkFavoriteProduct = async (productId: string) => {
+   try {
+    const res = await instance.get(`${API_URL}/favorite/check/${productId}`);
+    return res.data; 
+  } catch (error: any) {
+    console.error("Error checking favorite product:", error.message || error);
+    throw error;
+  }
+};
+
+// Lấy sản phẩm yêu thích
+export const getFavoriteProducts = async () => {
+   try {
+    const res = await instance.get(`${API_URL}/favorite`);
+    return res.data; 
+  } catch (error: any) {
+    console.error("Error fetching favorite products:", error.message || error);
+    throw error;
+  }
+};

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { getCategory, Category, getProductByCategory, getProtected} from "../../services/auth/authApi";
+import { getCategory, Category, getProductByCategory, getProtected, viewProduct} from "../../services/auth/authApi";
 import "./HomePage.css";
+import { useNavigate } from "react-router-dom";
+
 
 interface User {
   name: string;
@@ -8,7 +10,7 @@ interface User {
 }
 
 interface Product {
-  _id: string;
+  id: string;
   name: string;
   description: string;
   price: number;
@@ -17,6 +19,8 @@ interface Product {
 
 
 const HomePage: React.FC = () => {
+  const navigate = useNavigate();
+
   const [user, setUser] = useState<User | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -114,13 +118,24 @@ useEffect(() => {
           />
         </div>
 
-        {/* Hamburger Menu */}
-        <button
-          className="hamburger"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          ☰
-        </button>
+        <div className="header-icons">
+          {/* Nút Favorite */}
+          <div
+            className="favorite-icon"
+            onClick={() => navigate("/products/favorite")}
+          >
+            ♥
+            <span className="tooltip">Sản phẩm yêu thích</span>
+          </div>
+
+          {/* Hamburger Menu */}
+          <button
+            className="hamburger"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            ☰
+          </button>
+        </div>
       </header>
 
       {/* Menu dropdown */}
@@ -232,14 +247,27 @@ useEffect(() => {
         ) : (
           <div className="product-grid">
             {products.map((product) => (
-              <div className="product-card" key={product._id}>
+              <div className="product-card" key={product.id}>
                 <img
                   src={product.imageUrl || "data:image/png;base64,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"}
                   alt={product.name}
+                  onClick={async () => {
+                    try {
+                      // Gọi API viewProduct trước
+                      await viewProduct(product.id);
+                      // Sau đó điều hướng sang trang chi tiết sản phẩm
+                      navigate(`/products/${product.id}`);
+                    } catch (error) {
+                      console.error("Lỗi khi xử lý viewProduct:", error);
+                      // vẫn cho navigate nếu muốn
+                      navigate(`/products/${product.id}`);
+                    }
+                  }}
+                  style={{ cursor: "pointer" }}
                 />
                 <div className="product-info">
                   <h3>{product.name}</h3>
-                  <p>{product.description}</p>
+                  {/* <p>{product.description}</p> */}
                   <span className="price">{product.price.toLocaleString("vi-VN")} đ</span>
                 </div>
               </div>

@@ -16,19 +16,18 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await loginUser({ email, password });  // Gọi API đăng nhập
-    //  console.log(response.data);  // In ra dữ liệu từ backend
+      if (response.data.EC === 0) {
+        localStorage.setItem("token", response.data.access_token);
+        setSuccessMessage('Login successful! Redirecting to home...');
+        setErrorMessage('');
 
-      // Hiển thị thông báo thành công và chuyển hướng đến trang Home
-
-      localStorage.setItem("token", response.data.access_token);
-      
-
-      setSuccessMessage('Login successful! Redirecting to home...');
-      setErrorMessage('');
-      
-      setTimeout(() => {
-        navigate('/home');  // Chuyển hướng tới trang chủ sau khi đăng nhập thành công
-      }, 1500);  // Sau 1.5 giây chuyển hướng
+        setTimeout(() => {
+          navigate('/home');
+        }, 1500);
+      } else {
+        setErrorMessage(response.data.message || 'Invalid credentials');
+        setSuccessMessage('');
+      }
 
     } catch (error) {
       // Xử lý lỗi đăng nhập

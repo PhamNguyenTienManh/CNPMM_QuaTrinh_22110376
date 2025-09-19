@@ -33,6 +33,44 @@
   margin-bottom: 0;
 }
 
+.header-icons {
+  display: flex;
+  align-items: center;
+  gap: 35px; /* khoảng cách giữa heart và hamburger */
+}
+
+/* Heart icon */
+.favorite-icon {
+  position: relative;
+  font-size: 40px;
+  color: black;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+/* Tooltip */
+.tooltip {
+  position: absolute;
+  bottom: -90px; /* hiện bên dưới icon */
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s;
+}
+
+.favorite-icon:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+
 /* Hamburger button */
 .hamburger {
   font-size: 24px;
