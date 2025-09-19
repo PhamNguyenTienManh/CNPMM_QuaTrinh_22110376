@@ -1,4 +1,8 @@
 const Product = require("../models/product");
+const ProductVariant = require("../models/productVariant");
+const Color = require("../models/color");
+const Size = require("../models/size");
+
 const { elasticClient } = require("../config/elasticClient");
 // Tạo sản phẩm
 const createProduct = async (data) => {
@@ -56,7 +60,11 @@ const getProducts = async ({ categoryId, page = 1, limit = 10, q, priceIncrease 
     body: queryBody
   });
 
-  const products = result.hits.hits.map(hit => hit._source);
+  const products = result.hits.hits.map(hit => ({
+    id: hit._id,
+    ...hit._source
+  }));
+
 
   return {
     products,
@@ -66,11 +74,46 @@ const getProducts = async ({ categoryId, page = 1, limit = 10, q, priceIncrease 
   };
 };
 
+// Lấy những sản phẩm cùng loại (category)
+const getSimilarProducts = async (productId) => {
+  try {
+    // Tìm product ban đầu để lấy categoryId
+    const product = await Product.findById(productId).select("categoryId");
+    if (!product) {
+      throw new Error("Product not found");
+    }
+
+    // Lấy các sản phẩm cùng category nhưng loại bỏ product gốc
+    const similarProducts = await Product.find({
+      categoryId: product.categoryId,
+      _id: { $ne: productId }, // loại bỏ chính nó
+    })
+      .select("name price imageUrl categoryId") // chỉ lấy field cần thiết
+      .limit(10); // ví dụ chỉ lấy 10 sp tương tự
+
+    return similarProducts;
+  } catch (err) {
+    console.error("Error getting similar products:", err);
+    throw err;
+  }
+};
+
 
 // Lấy sản phẩm theo ID
-const getProductById = async (id) => {
-  return await Product.findById(id).lean();
+const getProductInfo = async (productId) => {
+  return await Product.findById(productId)
+    .populate("categoryId", "name") // chỉ lấy tên category
+    .populate({
+      path: "productVariants",
+      populate: [
+        { path: "colorId", select: "name hex" },
+        { path: "sizeId", select: "name" }
+      ]
+    })
+    .exec();
 };
+
+
 
 // Cập nhật sản phẩm
 const updateProduct = async (id, data) => {
@@ -86,5 +129,5 @@ const deleteProduct = async (id) => {
 };
 
 module.exports = {
-    createProduct, getProducts, getProductById, updateProduct, deleteProduct
+    createProduct, getProducts, getProductInfo, updateProduct, deleteProduct, getSimilarProducts
 }

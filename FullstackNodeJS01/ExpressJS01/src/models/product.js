@@ -6,7 +6,7 @@ const productSchema = new mongoose.Schema({
     price: {type: Number, required: true},
     categoryId: {type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
     imageUrl: String,
-    stock: {type: Number, default: 0},
+    productVariants: [{ type: mongoose.Schema.Types.ObjectId, ref: "ProductVariant" }],
 }, {timestamps: true});
 
 const Product = mongoose.model('Product', productSchema);

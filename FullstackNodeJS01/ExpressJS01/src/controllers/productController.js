@@ -1,4 +1,4 @@
-const { getProducts } = require("../services/productService");
+const { getProducts, getProductInfo, getSimilarProducts } = require("../services/productService");
 
 const getProductPagination = async (req, res) => {
   try {
@@ -27,4 +27,36 @@ const getProductPagination = async (req, res) => {
   }
 };
 
-module.exports = { getProductPagination };
+const getProductInfoController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await getProductInfo(id);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    res.json(product);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+const getSimilarProductsController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await getSimilarProducts(id);
+
+    if (!product) {
+      return res.status(404).json({ message: "Products similar not found" });
+    }
+
+    res.json(product);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
+
+module.exports = { getProductPagination, getProductInfoController, getSimilarProductsController};

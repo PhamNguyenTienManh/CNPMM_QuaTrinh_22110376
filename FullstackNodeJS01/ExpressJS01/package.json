@@ -7,7 +7,12 @@
     "dev": "nodemon ./src/server.js",
     "start": "nodemon ./src/server.js",
     "seed:categories": "node src/seeders/seedCategories.js",
-    "seed:products": "node src/seeders/seedProducts.js"
+    "seed:products": "node src/seeders/seedProducts.js",
+    "seed:sizes": "node src/seeders/seedSizes.js",
+    "seed:colors": "node src/seeders/seedColors.js",
+    "seed:variants": "node src/seeders/seedProductVariants.js",
+    "seed:favorites": "node src/seeders/seedFavorites.js",
+    "seed:feedbacks": "node src/seeders/seedFeedbacks.js"
   },
   "author": "Phạm Nguyễn Tiến Mạnh",
   "license": "ISC",

@@ -31,6 +31,7 @@ const seedProducts = async () => {
       price: 1000000 + i * 50000,
       imageUrl: "https://www.bing.com/th/id/OIP.vL8llPQDwKrkXGisNbc14wHaHa?w=210&h=211&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2",
       categoryId: sneakersCategory._id,
+      productVariants: [],
     }));
 
     // Tạo 15 sản phẩm cho Sandals
@@ -40,6 +41,7 @@ const seedProducts = async () => {
       price: 500000 + i * 30000,
       imageUrl: "https://www.bing.com/th/id/OIP.FXscHoXJXTuPBShiUb6GqwHaFj?w=244&h=211&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2",
       categoryId: sandalsCategory._id,
+      productVariants: [],
     }));
 
     const bootsProducts = Array.from({ length: 15 }, (_, i) => ({
@@ -48,6 +50,7 @@ const seedProducts = async () => {
       price: 500000 + i * 30000,
       imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfT5P3qBQ5r4lF9sQs88pY9xhe4tlGz-p0jA&s",
       categoryId: bootsCategory._id,
+      productVariants: [],
     }));
 
     // Insert MongoDB
